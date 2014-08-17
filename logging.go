@@ -156,7 +156,7 @@ func (logger *Logger) Log(level int, format string, args ...interface{}) error {
 		writer   io.Writer
 	)
 
-	if pc, pathname, lineno, ok = runtime.Caller(4); !ok {
+	if pc, pathname, lineno, ok = runtime.Caller(3); !ok {
 		pathname = "???"
 		filename = "???"
 		lineno = 0
@@ -231,7 +231,9 @@ func (logger *Logger) Informational(format string, args ...interface{}) {
 }
 
 func (logger *Logger) Info(format string, args ...interface{}) {
-	logger.Informational(format, args...)
+	if logger.level >= INFORMATIONAL {
+		logger.Log(INFORMATIONAL, format, args...)
+	}
 }
 
 func (logger *Logger) Notice(format string, args ...interface{}) {
@@ -247,7 +249,9 @@ func (logger *Logger) Warning(format string, args ...interface{}) {
 }
 
 func (logger *Logger) Warn(format string, args ...interface{}) {
-	logger.Warning(format, args...)
+	if logger.level >= WARNING {
+		logger.Log(WARNING, format, args...)
+	}
 }
 
 func (logger *Logger) Error(format string, args ...interface{}) {
@@ -257,7 +261,9 @@ func (logger *Logger) Error(format string, args ...interface{}) {
 }
 
 func (logger *Logger) Err(format string, args ...interface{}) {
-	logger.Error(format, args...)
+	if logger.level >= ERROR {
+		logger.Log(ERROR, format, args...)
+	}
 }
 
 func (logger *Logger) Critical(format string, args ...interface{}) {
@@ -268,11 +274,17 @@ func (logger *Logger) Critical(format string, args ...interface{}) {
 }
 
 func (logger *Logger) Crit(format string, args ...interface{}) {
-	logger.Critical(format, args...)
+	if logger.level >= CRITICAL {
+		logger.Log(CRITICAL, format, args...)
+		os.Exit(1)
+	}
 }
 
 func (logger *Logger) Fatal(format string, args ...interface{}) {
-	logger.Critical(format, args...)
+	if logger.level >= CRITICAL {
+		logger.Log(CRITICAL, format, args...)
+		os.Exit(1)
+	}
 }
 
 func (logger *Logger) Alert(format string, args ...interface{}) {
@@ -291,11 +303,19 @@ func (logger *Logger) Emergency(format string, args ...interface{}) {
 }
 
 func (logger *Logger) Emerg(format string, args ...interface{}) {
-	logger.Emergency(format, args...)
+	if logger.level >= EMERGENCY {
+		s := fmt.Sprintf(format, args...)
+		logger.Log(EMERGENCY, s)
+		panic(s)
+	}
 }
 
 func (logger *Logger) Panic(format string, args ...interface{}) {
-	logger.Emergency(format, args...)
+	if logger.level >= EMERGENCY {
+		s := fmt.Sprintf(format, args...)
+		logger.Log(EMERGENCY, s)
+		panic(s)
+	}
 }
 
 func SetLevel(level int) {
