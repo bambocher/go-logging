@@ -206,6 +206,12 @@ func (logger *Logger) SetLevel(level int) {
 	logger.level = level
 }
 
+func (logger *Logger) SetFormat(format string) {
+	logger.mutex.Lock()
+	defer logger.mutex.Unlock()
+	logger.format = format
+}
+
 func (logger *Logger) SetDateFormat(datefmt string) {
 	logger.mutex.Lock()
 	defer logger.mutex.Unlock()
@@ -320,6 +326,10 @@ func (logger *Logger) Panic(format string, args ...interface{}) {
 
 func SetLevel(level int) {
 	root.SetLevel(level)
+}
+
+func SetFormat(format string) {
+	root.SetFormat(format)
 }
 
 func SetDateFormat(datefmt string) {
