@@ -42,16 +42,32 @@ func GetLogger(name string) *Logger {
 	return logger
 }
 
+func GetName() string {
+	return root.GetName()
+}
+
 func SetLevel(level int) {
 	root.SetLevel(level)
+}
+
+func GetLevel() int {
+	return root.GetLevel()
 }
 
 func SetFormat(format string) {
 	root.SetFormat(format)
 }
 
+func GetFormat() string {
+	return root.GetFormat()
+}
+
 func SetDateFormat(datefmt string) {
 	root.SetDateFormat(datefmt)
+}
+
+func GetDateFormat() string {
+	return root.GetDateFormat()
 }
 
 func Trace(format string, args ...interface{}) {

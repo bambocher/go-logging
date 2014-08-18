@@ -98,10 +98,18 @@ func (logger *Logger) Log(level int, format string, args ...interface{}) error {
 	return err
 }
 
+func (logger *Logger) GetName() string {
+	return logger.name
+}
+
 func (logger *Logger) SetLevel(level int) {
 	logger.mutex.Lock()
 	defer logger.mutex.Unlock()
 	logger.level = level
+}
+
+func (logger *Logger) GetLevel() int {
+	return logger.level
 }
 
 func (logger *Logger) SetFormat(format string) {
@@ -110,10 +118,18 @@ func (logger *Logger) SetFormat(format string) {
 	logger.format = format
 }
 
+func (logger *Logger) GetFormat() string {
+	return logger.format
+}
+
 func (logger *Logger) SetDateFormat(datefmt string) {
 	logger.mutex.Lock()
 	defer logger.mutex.Unlock()
 	logger.datefmt = datefmt
+}
+
+func (logger *Logger) GetDateFormat() string {
+	return logger.datefmt
 }
 
 func (logger *Logger) Trace(format string, args ...interface{}) {
