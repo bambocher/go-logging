@@ -6,7 +6,7 @@ Simple logging library for Golang.
 Code status
 -----------
 
-[![Build Status](https://travis-ci.org/bambocher/go-logging.png?branch=master)](https://travis-ci.org/bambocher/go-logging)
+[![Build Status](https://travis-ci.org/bambocher/go-logging.svg?branch=master)](https://travis-ci.org/bambocher/go-logging)
 
 Installation
 ------------
