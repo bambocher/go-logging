@@ -28,7 +28,7 @@ import (
 
 func main() {
 	log.SetLevel(log.TRACE)
-	log.SetFormat("[{asctime}][{levelname}][{filename}:{lineno}] {message}\n")
+	log.SetFormat("[{date}][{level}][{file}:{line}] {message}\n")
 	log.SetDateFormat("2006-01-02 15:04:05")
 
 	log.Trace("Trace message.")

@@ -70,13 +70,12 @@ func (logger *Logger) Log(level int, format string, args ...interface{}) error {
 
 	replace := strings.NewReplacer(
 		"{name}", logger.name,
-		"{levelname}", GetLevelName(level),
-		"{levelno}", strconv.Itoa(level),
-		"{lineno}", strconv.Itoa(lineno),
-		"{asctime}", time.Now().Format(logger.datefmt),
-		"{filename}", filename,
-		"{pathname}", pathname,
-		"{funcName}", funcName,
+		"{level}", GetLevelName(level),
+		"{line}", strconv.Itoa(lineno),
+		"{date}", time.Now().Format(logger.datefmt),
+		"{file}", filename,
+		"{path}", pathname,
+		"{func}", funcName,
 		"{message}", fmt.Sprintf(format, args...),
 	)
 

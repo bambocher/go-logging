@@ -29,7 +29,7 @@ import (
 func main() {
 	test_log := log.GetLogger("test")
 	test_log.SetLevel(log.TRACE)
-	test_log.SetFormat("[{asctime}][{levelname}][{name}] {message}\n")
+	test_log.SetFormat("[{date}][{level}][{name}] {message}\n")
 	test_log.SetDateFormat("2006-01-02 15:04:05")
 
 	test_log.Trace("Trace message.")
@@ -41,7 +41,7 @@ func main() {
 
 	test2_log := log.GetLogger("test2")
 	test2_log.SetLevel(log.NOTICE)
-	test2_log.SetFormat("[{asctime}][{levelname}][{name}] {message}\n")
+	test2_log.SetFormat("[{date}][{level}][{name}] {message}\n")
 	test2_log.SetDateFormat("2006-01-02")
 
 	test2_log.Trace("Trace message.")

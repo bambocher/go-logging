@@ -34,7 +34,7 @@ func GetLogger(name string) *Logger {
 	logger := &Logger{
 		name:    name,
 		level:   DEBUG,
-		format:  "[{asctime}][{levelname}][{filename}:{lineno}] {message}\n",
+		format:  "[{date}][{level}][{file}:{line}] {message}\n",
 		datefmt: "2006-01-02 15:04:05", // http://golang.org/pkg/time/#pkg-constants
 	}
 
