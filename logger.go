@@ -73,12 +73,10 @@ func (logger *Logger) Log(level int, args ...interface{}) error {
 		filename = path.Base(pathname)
 	}
 
-	arg := fmt.Sprint(args[0])
+	message = fmt.Sprint(args[0])
 
-	if len(args) == 0 {
-		message = arg
-	} else {
-		message = fmt.Sprintf(arg, args[1:]...)
+	if len(args) != 0 {
+		message = fmt.Sprintf(message, args[1:]...)
 	}
 
 	replace := strings.NewReplacer(
@@ -99,9 +97,7 @@ func (logger *Logger) Log(level int, args ...interface{}) error {
 
 	if logger.level >= WARNING {
 		writer = os.Stdout
-	}
-
-	if logger.level < WARNING {
+	} else {
 		writer = os.Stderr
 	}
 
