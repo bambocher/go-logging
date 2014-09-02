@@ -44,6 +44,10 @@ type Logger struct {
 
 func (logger *Logger) Log(level int, args ...interface{}) error {
 
+	if logger.level < level {
+		return nil
+	}
+
 	var (
 		pc       uintptr
 		pathname string
@@ -141,110 +145,76 @@ func (logger *Logger) GetDateFormat() string {
 }
 
 func (logger *Logger) Print(args ...interface{}) {
-	if logger.level >= NOTSET {
-		logger.Log(NOTSET, args...)
-	}
+	logger.Log(NOTSET, args...)
 }
 
 func (logger *Logger) Trace(args ...interface{}) {
-	if logger.level >= TRACE {
-		logger.Log(TRACE, args...)
-	}
+	logger.Log(TRACE, args...)
 }
 
 func (logger *Logger) Debug(args ...interface{}) {
-	if logger.level >= DEBUG {
-		logger.Log(DEBUG, args...)
-	}
+	logger.Log(DEBUG, args...)
 }
 
 func (logger *Logger) Informational(args ...interface{}) {
-	if logger.level >= INFORMATIONAL {
-		logger.Log(INFORMATIONAL, args...)
-	}
+	logger.Log(INFORMATIONAL, args...)
 }
 
 func (logger *Logger) Info(args ...interface{}) {
-	if logger.level >= INFO {
-		logger.Log(INFO, args...)
-	}
+	logger.Log(INFO, args...)
 }
 
 func (logger *Logger) Notice(args ...interface{}) {
-	if logger.level >= NOTICE {
-		logger.Log(NOTICE, args...)
-	}
+	logger.Log(NOTICE, args...)
 }
 
 func (logger *Logger) Warning(args ...interface{}) {
-	if logger.level >= WARNING {
-		logger.Log(WARNING, args...)
-	}
+	logger.Log(WARNING, args...)
 }
 
 func (logger *Logger) Warn(args ...interface{}) {
-	if logger.level >= WARN {
-		logger.Log(WARN, args...)
-	}
+	logger.Log(WARN, args...)
 }
 
 func (logger *Logger) Error(args ...interface{}) {
-	if logger.level >= ERROR {
-		logger.Log(ERROR, args...)
-	}
+	logger.Log(ERROR, args...)
 }
 
 func (logger *Logger) Err(args ...interface{}) {
-	if logger.level >= ERR {
-		logger.Log(ERR, args...)
-	}
+	logger.Log(ERR, args...)
 }
 
 func (logger *Logger) Critical(args ...interface{}) {
-	if logger.level >= CRITICAL {
-		logger.Log(CRITICAL, args...)
-		os.Exit(1)
-	}
+	logger.Log(CRITICAL, args...)
+	os.Exit(1)
 }
 
 func (logger *Logger) Crit(args ...interface{}) {
-	if logger.level >= CRIT {
-		logger.Log(CRIT, args...)
-		os.Exit(1)
-	}
+	logger.Log(CRIT, args...)
+	os.Exit(1)
 }
 
 func (logger *Logger) Fatal(args ...interface{}) {
-	if logger.level >= FATAL {
-		logger.Log(FATAL, args...)
-		os.Exit(1)
-	}
+	logger.Log(FATAL, args...)
+	os.Exit(1)
 }
 
 func (logger *Logger) Alert(args ...interface{}) {
-	if logger.level >= ALERT {
-		logger.Log(ALERT, args...)
-		os.Exit(1)
-	}
+	logger.Log(ALERT, args...)
+	os.Exit(1)
 }
 
 func (logger *Logger) Emergency(args ...interface{}) {
-	if logger.level >= EMERGENCY {
-		logger.Log(EMERGENCY, args...)
-		panic(fmt.Sprint(args...))
-	}
+	logger.Log(EMERGENCY, args...)
+	panic(fmt.Sprint(args...))
 }
 
 func (logger *Logger) Emerg(args ...interface{}) {
-	if logger.level >= EMERG {
-		logger.Log(EMERG, args...)
-		panic(fmt.Sprint(args...))
-	}
+	logger.Log(EMERG, args...)
+	panic(fmt.Sprint(args...))
 }
 
 func (logger *Logger) Panic(args ...interface{}) {
-	if logger.level >= PANIC {
-		logger.Log(PANIC, args...)
-		panic(fmt.Sprint(args...))
-	}
+	logger.Log(PANIC, args...)
+	panic(fmt.Sprint(args...))
 }
