@@ -42,13 +42,14 @@ type Logger struct {
 	datefmt string
 }
 
-func (logger *Logger) Log(level int, format string, args ...interface{}) error {
+func (logger *Logger) Log(level int, args ...interface{}) error {
 
 	var (
 		pc       uintptr
 		pathname string
 		filename string
 		funcName string
+		message  string
 		lineno   int
 		ok       bool
 		writer   io.Writer
@@ -68,6 +69,14 @@ func (logger *Logger) Log(level int, format string, args ...interface{}) error {
 		filename = path.Base(pathname)
 	}
 
+	arg := fmt.Sprint(args[0])
+
+	if len(args) == 0 {
+		message = arg
+	} else {
+		message = fmt.Sprintf(arg, args[1:]...)
+	}
+
 	replace := strings.NewReplacer(
 		"{name}", logger.name,
 		"{level}", GetLevelName(level),
@@ -76,7 +85,7 @@ func (logger *Logger) Log(level int, format string, args ...interface{}) error {
 		"{file}", filename,
 		"{path}", pathname,
 		"{func}", funcName,
-		"{message}", fmt.Sprintf(format, args...),
+		"{message}", message,
 	)
 
 	buf := []byte(replace.Replace(logger.format))
@@ -131,114 +140,111 @@ func (logger *Logger) GetDateFormat() string {
 	return logger.datefmt
 }
 
-func (logger *Logger) Print(format string, args ...interface{}) {
+func (logger *Logger) Print(args ...interface{}) {
 	if logger.level >= NOTSET {
-		logger.Log(NOTSET, format, args...)
+		logger.Log(NOTSET, args...)
 	}
 }
 
-func (logger *Logger) Trace(format string, args ...interface{}) {
+func (logger *Logger) Trace(args ...interface{}) {
 	if logger.level >= TRACE {
-		logger.Log(TRACE, format, args...)
+		logger.Log(TRACE, args...)
 	}
 }
 
-func (logger *Logger) Debug(format string, args ...interface{}) {
+func (logger *Logger) Debug(args ...interface{}) {
 	if logger.level >= DEBUG {
-		logger.Log(DEBUG, format, args...)
+		logger.Log(DEBUG, args...)
 	}
 }
 
-func (logger *Logger) Informational(format string, args ...interface{}) {
+func (logger *Logger) Informational(args ...interface{}) {
 	if logger.level >= INFORMATIONAL {
-		logger.Log(INFORMATIONAL, format, args...)
+		logger.Log(INFORMATIONAL, args...)
 	}
 }
 
-func (logger *Logger) Info(format string, args ...interface{}) {
+func (logger *Logger) Info(args ...interface{}) {
 	if logger.level >= INFO {
-		logger.Log(INFO, format, args...)
+		logger.Log(INFO, args...)
 	}
 }
 
-func (logger *Logger) Notice(format string, args ...interface{}) {
+func (logger *Logger) Notice(args ...interface{}) {
 	if logger.level >= NOTICE {
-		logger.Log(NOTICE, format, args...)
+		logger.Log(NOTICE, args...)
 	}
 }
 
-func (logger *Logger) Warning(format string, args ...interface{}) {
+func (logger *Logger) Warning(args ...interface{}) {
 	if logger.level >= WARNING {
-		logger.Log(WARNING, format, args...)
+		logger.Log(WARNING, args...)
 	}
 }
 
-func (logger *Logger) Warn(format string, args ...interface{}) {
+func (logger *Logger) Warn(args ...interface{}) {
 	if logger.level >= WARN {
-		logger.Log(WARN, format, args...)
+		logger.Log(WARN, args...)
 	}
 }
 
-func (logger *Logger) Error(format string, args ...interface{}) {
+func (logger *Logger) Error(args ...interface{}) {
 	if logger.level >= ERROR {
-		logger.Log(ERROR, format, args...)
+		logger.Log(ERROR, args...)
 	}
 }
 
-func (logger *Logger) Err(format string, args ...interface{}) {
+func (logger *Logger) Err(args ...interface{}) {
 	if logger.level >= ERR {
-		logger.Log(ERR, format, args...)
+		logger.Log(ERR, args...)
 	}
 }
 
-func (logger *Logger) Critical(format string, args ...interface{}) {
+func (logger *Logger) Critical(args ...interface{}) {
 	if logger.level >= CRITICAL {
-		logger.Log(CRITICAL, format, args...)
+		logger.Log(CRITICAL, args...)
 		os.Exit(1)
 	}
 }
 
-func (logger *Logger) Crit(format string, args ...interface{}) {
+func (logger *Logger) Crit(args ...interface{}) {
 	if logger.level >= CRIT {
-		logger.Log(CRIT, format, args...)
+		logger.Log(CRIT, args...)
 		os.Exit(1)
 	}
 }
 
-func (logger *Logger) Fatal(format string, args ...interface{}) {
+func (logger *Logger) Fatal(args ...interface{}) {
 	if logger.level >= FATAL {
-		logger.Log(FATAL, format, args...)
+		logger.Log(FATAL, args...)
 		os.Exit(1)
 	}
 }
 
-func (logger *Logger) Alert(format string, args ...interface{}) {
+func (logger *Logger) Alert(args ...interface{}) {
 	if logger.level >= ALERT {
-		logger.Log(ALERT, format, args...)
+		logger.Log(ALERT, args...)
 		os.Exit(1)
 	}
 }
 
-func (logger *Logger) Emergency(format string, args ...interface{}) {
+func (logger *Logger) Emergency(args ...interface{}) {
 	if logger.level >= EMERGENCY {
-		s := fmt.Sprintf(format, args...)
-		logger.Log(EMERGENCY, s)
-		panic(s)
+		logger.Log(EMERGENCY, args...)
+		panic(fmt.Sprint(args...))
 	}
 }
 
-func (logger *Logger) Emerg(format string, args ...interface{}) {
+func (logger *Logger) Emerg(args ...interface{}) {
 	if logger.level >= EMERG {
-		s := fmt.Sprintf(format, args...)
-		logger.Log(EMERG, s)
-		panic(s)
+		logger.Log(EMERG, args...)
+		panic(fmt.Sprint(args...))
 	}
 }
 
-func (logger *Logger) Panic(format string, args ...interface{}) {
+func (logger *Logger) Panic(args ...interface{}) {
 	if logger.level >= PANIC {
-		s := fmt.Sprintf(format, args...)
-		logger.Log(PANIC, s)
-		panic(s)
+		logger.Log(PANIC, args...)
+		panic(fmt.Sprint(args...))
 	}
 }

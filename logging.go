@@ -70,77 +70,77 @@ func GetDateFormat() string {
 	return root.GetDateFormat()
 }
 
-func Print(format string, args ...interface{}) {
-	root.Print(format, args...)
+func Print(args ...interface{}) {
+	root.Print(args...)
 }
 
-func Trace(format string, args ...interface{}) {
-	root.Trace(format, args...)
+func Trace(args ...interface{}) {
+	root.Trace(args...)
 }
 
-func Debug(format string, args ...interface{}) {
-	root.Debug(format, args...)
+func Debug(args ...interface{}) {
+	root.Debug(args...)
 }
 
-func Informational(format string, args ...interface{}) {
-	root.Informational(format, args...)
+func Informational(args ...interface{}) {
+	root.Informational(args...)
 }
 
-func Info(format string, args ...interface{}) {
-	root.Info(format, args...)
+func Info(args ...interface{}) {
+	root.Info(args...)
 }
 
-func Notice(format string, args ...interface{}) {
-	root.Notice(format, args...)
+func Notice(args ...interface{}) {
+	root.Notice(args...)
 }
 
-func Warning(format string, args ...interface{}) {
-	root.Warning(format, args...)
+func Warning(args ...interface{}) {
+	root.Warning(args...)
 }
 
-func Warn(format string, args ...interface{}) {
-	root.Warn(format, args...)
+func Warn(args ...interface{}) {
+	root.Warn(args...)
 }
 
-func Error(format string, args ...interface{}) {
-	root.Error(format, args...)
+func Error(args ...interface{}) {
+	root.Error(args...)
 }
 
-func Err(format string, args ...interface{}) {
-	root.Err(format, args...)
+func Err(args ...interface{}) {
+	root.Err(args...)
 }
 
 // Critical is equivalent to Printf() followed by a call to os.Exit(1).
-func Critical(format string, args ...interface{}) {
-	root.Critical(format, args...)
+func Critical(args ...interface{}) {
+	root.Critical(args...)
 }
 
 // Crit is equivalent to Printf() followed by a call to os.Exit(1).
-func Crit(format string, args ...interface{}) {
-	root.Crit(format, args...)
+func Crit(args ...interface{}) {
+	root.Crit(args...)
 }
 
 // Fatal is equivalent to Printf() followed by a call to os.Exit(1).
-func Fatal(format string, args ...interface{}) {
-	root.Fatal(format, args...)
+func Fatal(args ...interface{}) {
+	root.Fatal(args...)
 }
 
 // Alert is equivalent to Printf() followed by a call to os.Exit(1).
-func Alert(format string, args ...interface{}) {
-	root.Alert(format, args...)
+func Alert(args ...interface{}) {
+	root.Alert(args...)
 }
 
 // Emergency is equivalent to Printf() followed by a call to panic().
-func Emergency(format string, args ...interface{}) {
-	root.Emergency(format, args...)
+func Emergency(args ...interface{}) {
+	root.Emergency(args...)
 }
 
 // Emerg is equivalent to Printf() followed by a call to panic().
-func Emerg(format string, args ...interface{}) {
-	root.Emerg(format, args...)
+func Emerg(args ...interface{}) {
+	root.Emerg(args...)
 }
 
 // Panic is equivalent to Printf() followed by a call to panic().
-func Panic(format string, args ...interface{}) {
-	root.Panic(format, args...)
+func Panic(args ...interface{}) {
+	root.Panic(args...)
 }
