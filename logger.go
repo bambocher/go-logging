@@ -131,6 +131,12 @@ func (logger *Logger) GetDateFormat() string {
 	return logger.datefmt
 }
 
+func (logger *Logger) Print(format string, args ...interface{}) {
+	if logger.level >= NOTSET {
+		logger.Log(NOTSET, format, args...)
+	}
+}
+
 func (logger *Logger) Trace(format string, args ...interface{}) {
 	if logger.level >= TRACE {
 		logger.Log(TRACE, format, args...)

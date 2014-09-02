@@ -70,6 +70,10 @@ func GetDateFormat() string {
 	return root.GetDateFormat()
 }
 
+func Print(format string, args ...interface{}) {
+	root.Print(format, args...)
+}
+
 func Trace(format string, args ...interface{}) {
 	root.Trace(format, args...)
 }
