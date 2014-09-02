@@ -28,10 +28,11 @@ import (
 
 func main() {
 	test_log := log.GetLogger("test")
-	test_log.SetLevel(log.TRACE)
+	test_log.SetLevel(log.NOTSET)
 	test_log.SetFormat("[{date}][{level}][{name}] {message}\n")
 	test_log.SetDateFormat("2006-01-02 15:04:05")
 
+	test_log.Print("Notset message.")
 	test_log.Trace("Trace message.")
 	test_log.Debug("Debug message.")
 	test_log.Info("Informational message.")
@@ -44,6 +45,7 @@ func main() {
 	test2_log.SetFormat("[{date}][{level}][{name}] {message}\n")
 	test2_log.SetDateFormat("2006-01-02")
 
+	test2_log.Print("Notset message.")
 	test2_log.Trace("Trace message.")
 	test2_log.Debug("Debug message.")
 	test2_log.Info("Informational message.")

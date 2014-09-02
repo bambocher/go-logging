@@ -27,10 +27,11 @@ import (
 )
 
 func main() {
-	log.SetLevel(log.TRACE)
+	log.SetLevel(log.NOTSET)
 	log.SetFormat("[{date}][{level}][{file}:{line}] {message}\n")
 	log.SetDateFormat("2006-01-02 15:04:05")
 
+	log.Print("Notset message.")
 	log.Trace("Trace message.")
 	log.Debug("Debug message.")
 	log.Info("Informational message.")
