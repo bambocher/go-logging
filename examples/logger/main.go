@@ -39,6 +39,9 @@ func main() {
 	test_log.Notice("Notice message.")
 	test_log.Warning("Warning message.")
 	test_log.Error("Error message.")
+	test_log.Critical("Critical message.")
+	test_log.Alert("Alert message.")
+	test_log.Panic("Panic message.")
 
 	test2_log := log.GetLogger("test2")
 	test2_log.SetLevel("NOTICE")
@@ -52,4 +55,7 @@ func main() {
 	test2_log.Notice("Notice message.")
 	test2_log.Warning("Warning message.")
 	test2_log.Error("Error message.")
+	test2_log.Critical("Critical message.")
+	test2_log.Alert("Alert message.")
+	test2_log.Panic("Panic message.")
 }

@@ -38,7 +38,7 @@ func main() {
 	log.Notice("Notice message.")
 	log.Warning("Warning message.")
 	log.Error("Error message.")
-	//	log.Critical("Critical message.")
-	//	log.Alert("Alert message.")
-	//  log.Panic("Panic message.")
+	log.Critical("Critical message.")
+	log.Alert("Alert message.")
+	log.Panic("Panic message.")
 }
