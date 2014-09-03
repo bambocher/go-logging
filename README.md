@@ -1,4 +1,4 @@
-go-logging
+golog
 ==========
 
 Simple logging library for Golang.
@@ -16,23 +16,43 @@ Installation
 Quick-start
 -----------
 
+Minimal:
+
+```go
+package main
+
+import "github.com/bambocher/golog"
+
+func main() {
+    golog.Info("Informational message.")
+}
+
+```
+
+or more complicated:
+
 ```go
 package main
 
 import log "github.com/bambocher/golog"
 
 func main() {
-    log.SetLevel(log.TRACE)
-    log.SetFormat("[{asctime}][{levelname}][{filename}:{lineno}] {message}\n")
+    log.SetLevel("notset")
+    log.SetFormat("[{date}][{level}][{file}:{line}] {message}")
     log.SetDateFormat("2006-01-02 15:04:05")
 
+    log.Print("Notset message.")
     log.Trace("Trace message.")
     log.Debug("Debug message.")
     log.Info("Informational message.")
     log.Notice("Notice message.")
     log.Warning("Warning message.")
     log.Error("Error message.")
+    log.Critical("Critical message.")
+    log.Alert("Alert message.")
+    log.Panic("Panic message.")
 }
+
 ```
 
 Examples
