@@ -29,7 +29,7 @@ import (
 func main() {
 	test_log := log.GetLogger("test")
 	test_log.SetLevel(log.NOTSET)
-	test_log.SetFormat("[{date}][{level}][{name}] {message}\n")
+	test_log.SetFormat("[{date}][{level}][{name}] {message}")
 	test_log.SetDateFormat("2006-01-02 15:04:05")
 
 	test_log.Print("Notset message.")
@@ -41,7 +41,7 @@ func main() {
 	test_log.Error("Error message.")
 	test_log.Critical("Critical message.")
 	test_log.Alert("Alert message.")
-	test_log.Panic("Panic message.")
+	//	test_log.Panic("Panic message.")
 
 	test2_log := log.GetLogger("test2")
 	test2_log.SetLevel("NOTICE")

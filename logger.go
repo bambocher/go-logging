@@ -92,6 +92,9 @@ func (logger *Logger) Log(level int, args ...interface{}) error {
 	)
 
 	buf := []byte(replace.Replace(logger.format))
+	if buf[len(buf)-1] != '\n' {
+		buf = append(buf, '\n')
+	}
 
 	logger.mutex.Lock()
 	defer logger.mutex.Unlock()
