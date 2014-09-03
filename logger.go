@@ -152,10 +152,6 @@ func (logger *Logger) Debug(args ...interface{}) {
 	logger.Log(DEBUG, args...)
 }
 
-func (logger *Logger) Informational(args ...interface{}) {
-	logger.Log(INFORMATIONAL, args...)
-}
-
 func (logger *Logger) Info(args ...interface{}) {
 	logger.Log(INFO, args...)
 }
@@ -168,16 +164,8 @@ func (logger *Logger) Warning(args ...interface{}) {
 	logger.Log(WARNING, args...)
 }
 
-func (logger *Logger) Warn(args ...interface{}) {
-	logger.Log(WARN, args...)
-}
-
 func (logger *Logger) Error(args ...interface{}) {
 	logger.Log(ERROR, args...)
-}
-
-func (logger *Logger) Err(args ...interface{}) {
-	logger.Log(ERR, args...)
 }
 
 func (logger *Logger) Critical(args ...interface{}) {
@@ -185,29 +173,9 @@ func (logger *Logger) Critical(args ...interface{}) {
 	os.Exit(1)
 }
 
-func (logger *Logger) Crit(args ...interface{}) {
-	logger.Log(CRIT, args...)
-	os.Exit(1)
-}
-
-func (logger *Logger) Fatal(args ...interface{}) {
-	logger.Log(FATAL, args...)
-	os.Exit(1)
-}
-
 func (logger *Logger) Alert(args ...interface{}) {
 	logger.Log(ALERT, args...)
 	os.Exit(1)
-}
-
-func (logger *Logger) Emergency(args ...interface{}) {
-	logger.Log(EMERGENCY, args...)
-	panic(fmt.Sprint(args...))
-}
-
-func (logger *Logger) Emerg(args ...interface{}) {
-	logger.Log(EMERG, args...)
-	panic(fmt.Sprint(args...))
 }
 
 func (logger *Logger) Panic(args ...interface{}) {

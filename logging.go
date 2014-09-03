@@ -82,10 +82,6 @@ func Debug(args ...interface{}) {
 	root.Debug(args...)
 }
 
-func Informational(args ...interface{}) {
-	root.Informational(args...)
-}
-
 func Info(args ...interface{}) {
 	root.Info(args...)
 }
@@ -98,16 +94,8 @@ func Warning(args ...interface{}) {
 	root.Warning(args...)
 }
 
-func Warn(args ...interface{}) {
-	root.Warn(args...)
-}
-
 func Error(args ...interface{}) {
 	root.Error(args...)
-}
-
-func Err(args ...interface{}) {
-	root.Err(args...)
 }
 
 // Critical is equivalent to Printf() followed by a call to os.Exit(1).
@@ -115,29 +103,9 @@ func Critical(args ...interface{}) {
 	root.Critical(args...)
 }
 
-// Crit is equivalent to Printf() followed by a call to os.Exit(1).
-func Crit(args ...interface{}) {
-	root.Crit(args...)
-}
-
-// Fatal is equivalent to Printf() followed by a call to os.Exit(1).
-func Fatal(args ...interface{}) {
-	root.Fatal(args...)
-}
-
 // Alert is equivalent to Printf() followed by a call to os.Exit(1).
 func Alert(args ...interface{}) {
 	root.Alert(args...)
-}
-
-// Emergency is equivalent to Printf() followed by a call to panic().
-func Emergency(args ...interface{}) {
-	root.Emergency(args...)
-}
-
-// Emerg is equivalent to Printf() followed by a call to panic().
-func Emerg(args ...interface{}) {
-	root.Emerg(args...)
 }
 
 // Panic is equivalent to Printf() followed by a call to panic().
