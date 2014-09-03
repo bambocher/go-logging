@@ -23,7 +23,7 @@
 package main
 
 import (
-	log "git.bambucha.org/bambucha/go-logging"
+	log "github.com/bambocher/golog"
 )
 
 func main() {

@@ -1,4 +1,4 @@
-// go-logging - Logging library for Go
+// golog - Logging library for Go
 //
 // Copyright (c) 2014 Dmitry Prazdnichnov <dp@bambucha.org>
 //
@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-package logging
+package golog
 
 import (
 	"errors"

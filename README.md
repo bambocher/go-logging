@@ -6,12 +6,12 @@ Simple logging library for Golang.
 Code status
 -----------
 
-[![Build Status](https://travis-ci.org/bambocher/go-logging.svg?branch=master)](https://travis-ci.org/bambocher/go-logging)
+[![Build Status](https://travis-ci.org/bambocher/golog.svg?branch=master)](https://travis-ci.org/bambocher/golog)
 
 Installation
 ------------
 
-    $ go get -u github.com/bambocher/go-logging
+    $ go get -u github.com/bambocher/golog
 
 Quick-start
 -----------
@@ -19,7 +19,7 @@ Quick-start
 ```go
 package main
 
-import log "github.com/bambocher/go-logging"
+import log "github.com/bambocher/golog"
 
 func main() {
     log.SetLevel(log.TRACE)
