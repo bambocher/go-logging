@@ -23,6 +23,7 @@
 package logging
 
 import (
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -110,10 +111,20 @@ func (logger *Logger) GetName() string {
 	return logger.name
 }
 
-func (logger *Logger) SetLevel(level int) {
+func (logger *Logger) SetLevel(level interface{}) error {
 	logger.mutex.Lock()
 	defer logger.mutex.Unlock()
-	logger.level = level
+
+	switch level.(type) {
+	case int:
+		logger.level = level.(int)
+	case string:
+		logger.level = GetLevelNumber(level.(string))
+	default:
+		return errors.New("Incorrect parameter type level, a valid string or int")
+	}
+
+	return nil
 }
 
 func (logger *Logger) GetLevel() int {
@@ -170,12 +181,10 @@ func (logger *Logger) Error(args ...interface{}) {
 
 func (logger *Logger) Critical(args ...interface{}) {
 	logger.Log(CRITICAL, args...)
-	os.Exit(1)
 }
 
 func (logger *Logger) Alert(args ...interface{}) {
 	logger.Log(ALERT, args...)
-	os.Exit(1)
 }
 
 func (logger *Logger) Panic(args ...interface{}) {

@@ -46,7 +46,7 @@ func GetName() string {
 	return root.GetName()
 }
 
-func SetLevel(level int) {
+func SetLevel(level interface{}) {
 	root.SetLevel(level)
 }
 
@@ -98,12 +98,10 @@ func Error(args ...interface{}) {
 	root.Error(args...)
 }
 
-// Critical is equivalent to Printf() followed by a call to os.Exit(1).
 func Critical(args ...interface{}) {
 	root.Critical(args...)
 }
 
-// Alert is equivalent to Printf() followed by a call to os.Exit(1).
 func Alert(args ...interface{}) {
 	root.Alert(args...)
 }

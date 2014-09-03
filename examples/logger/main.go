@@ -41,7 +41,7 @@ func main() {
 	test_log.Error("Error message.")
 
 	test2_log := log.GetLogger("test2")
-	test2_log.SetLevel(log.NOTICE)
+	test2_log.SetLevel("NOTICE")
 	test2_log.SetFormat("[{date}][{level}][{name}] {message}\n")
 	test2_log.SetDateFormat("2006-01-02")
 

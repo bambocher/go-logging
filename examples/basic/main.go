@@ -27,7 +27,7 @@ import (
 )
 
 func main() {
-	log.SetLevel(log.NOTSET)
+	log.SetLevel("notset")
 	log.SetFormat("[{date}][{level}][{file}:{line}] {message}\n")
 	log.SetDateFormat("2006-01-02 15:04:05")
 
