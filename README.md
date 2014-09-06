@@ -44,6 +44,7 @@ func main() {
     log.Print("Notset message.")
     log.Trace("Trace message.")
     log.Debug("Debug message.")
+    log.Info(42)
     log.Info("%s message.", "Informational")
     log.Notice("Notice message.")
     log.Warning("Warning message.")
