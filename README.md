@@ -37,9 +37,11 @@ package main
 import log "github.com/bambocher/golog"
 
 func main() {
+    defaultFormatter := log.GetFormatter("default")
+    defaultFormatter.SetFormat("[{date}][{levelName}][{fileName}:{lineNo}] {message}")
+    defaultFormatter.SetDateFormat("2006-01-02 15:04:05")
+
     log.SetLevel("notset")
-    log.SetFormat("[{date}][{level}][{file}:{line}] {message}")
-    log.SetDateFormat("2006-01-02 15:04:05")
 
     log.Print("Notset message.")
     log.Trace("Trace message.")
