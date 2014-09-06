@@ -62,7 +62,7 @@ func GetFileHandler(name, fileName string, dirMode, fileMode os.FileMode) (Handl
 	handlers[name] = &FileHandler{
 		BaseHandler: BaseHandler{
 			name:      name,
-			level:     Level{NOTSET, PANIC},
+			level:     Level{PANIC, NOTSET},
 			formatter: GetFormatter("default"),
 		},
 		file: file,

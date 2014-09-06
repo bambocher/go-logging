@@ -50,7 +50,7 @@ func GetStreamHandler(name string, stream io.Writer) Handler {
 	handlers[name] = &StreamHandler{
 		BaseHandler: BaseHandler{
 			name:      name,
-			level:     Level{NOTSET, PANIC},
+			level:     Level{PANIC, NOTSET},
 			formatter: GetFormatter("default"),
 		},
 		stream: stream,

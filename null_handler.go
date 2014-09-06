@@ -38,7 +38,7 @@ func GetNullHandler(name string) Handler {
 	handlers[name] = &NullHandler{
 		BaseHandler: BaseHandler{
 			name:      name,
-			level:     Level{NOTSET, PANIC},
+			level:     Level{PANIC, NOTSET},
 			formatter: GetFormatter("default"),
 		},
 	}
