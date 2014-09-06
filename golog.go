@@ -22,70 +22,70 @@
 
 package golog
 
-var Root = GetLogger("root")
+var RootLogger = GetLogger("root")
 
 func SetName(name string) {
-	Root.SetName(name)
+	RootLogger.SetName(name)
 }
 
 func GetName() string {
-	return Root.GetName()
+	return RootLogger.GetName()
 }
 
 func SetLevel(level interface{}) error {
-	err := Root.SetLevel(level)
+	err := RootLogger.SetLevel(level)
 	return err
 }
 
 func GetLevel() int {
-	return Root.GetLevel()
+	return RootLogger.GetLevel()
 }
 
 func SetHandlers(handlers []Handler) error {
-	err := Root.SetHandlers(handlers)
+	err := RootLogger.SetHandlers(handlers)
 	return err
 }
 
 func GetHandlers() []Handler {
-	return Root.GetHandlers()
+	return RootLogger.GetHandlers()
 }
 
 func Print(args ...interface{}) {
-	Root.Print(args...)
+	RootLogger.Print(args...)
 }
 
 func Trace(args ...interface{}) {
-	Root.Trace(args...)
+	RootLogger.Trace(args...)
 }
 
 func Debug(args ...interface{}) {
-	Root.Debug(args...)
+	RootLogger.Debug(args...)
 }
 
 func Info(args ...interface{}) {
-	Root.Info(args...)
+	RootLogger.Info(args...)
 }
 
 func Notice(args ...interface{}) {
-	Root.Notice(args...)
+	RootLogger.Notice(args...)
 }
 
 func Warning(args ...interface{}) {
-	Root.Warning(args...)
+	RootLogger.Warning(args...)
 }
 
 func Error(args ...interface{}) {
-	Root.Error(args...)
+	RootLogger.Error(args...)
 }
 
 func Critical(args ...interface{}) {
-	Root.Critical(args...)
+	RootLogger.Critical(args...)
 }
 
 func Alert(args ...interface{}) {
-	Root.Alert(args...)
+	RootLogger.Alert(args...)
 }
 
 func Panic(args ...interface{}) {
-	Root.Panic(args...)
+	RootLogger.Panic(args...)
 }
