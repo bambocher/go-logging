@@ -21,10 +21,10 @@ Minimal:
 ```go
 package main
 
-import "github.com/bambocher/golog"
+import log "github.com/bambocher/golog"
 
 func main() {
-    golog.Info("Informational message.")
+    log.Info("Informational message.")
 }
 
 ```
@@ -59,6 +59,11 @@ Examples
 --------
 
 You can find a few more examples here: [examples](examples/)
+
+Documentation
+-------------
+
+[http://godoc.org/github.com/bambocher/golog](http://godoc.org/github.com/bambocher/golog)
 
 License
 -------
