@@ -35,6 +35,8 @@ import (
 	"time"
 )
 
+var loggers = make(map[string]*Logger)
+
 type Logger struct {
 	name    string
 	mutex   sync.Mutex
@@ -192,4 +194,18 @@ func (logger *Logger) Alert(args ...interface{}) {
 
 func (logger *Logger) Panic(args ...interface{}) {
 	logger.Log(PANIC, args...)
+}
+
+func GetLogger(name string) *Logger {
+	if logger, ok := loggers[name]; ok {
+		return logger
+	}
+
+	loggers[name] = &Logger{
+		name:     name,
+		level:    NOTSET,
+		handlers: []Handler{stdout, stderr},
+	}
+
+	return loggers[name]
 }
