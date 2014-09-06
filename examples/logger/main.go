@@ -22,15 +22,19 @@
 
 package main
 
-import (
-	log "github.com/bambocher/golog"
-)
+import log "github.com/bambocher/golog"
 
 func main() {
+	test_formatter := log.GetFormatter("test_formatter")
+	test_formatter.SetFormat("[{date}][{levelName}][{fileName}:{lineNo}] {message}")
+	test_formatter.SetDateFormat("2006-01-02 15:04:05")
+
 	test_log := log.GetLogger("test")
 	test_log.SetLevel(log.NOTSET)
-	test_log.SetFormat("[{date}][{level}][{name}] {message}")
-	test_log.SetDateFormat("2006-01-02 15:04:05")
+
+	for handler := range test_log.GetHandlers() {
+		test_log.GetHandlers()[handler].SetFormatter(test_formatter)
+	}
 
 	test_log.Print("Notset message.")
 	test_log.Trace("Trace message.")
@@ -41,12 +45,18 @@ func main() {
 	test_log.Error("Error message.")
 	test_log.Critical("Critical message.")
 	test_log.Alert("Alert message.")
-	//	test_log.Panic("Panic message.")
+	test_log.Panic("Panic message.")
+
+	test2_formatter := log.GetFormatter("test2_formatter")
+	test2_formatter.SetFormat("[{date}][{levelNo}][{loggerName}] {message}\n")
+	test2_formatter.SetDateFormat("2006-01-02")
 
 	test2_log := log.GetLogger("test2")
 	test2_log.SetLevel("NOTICE")
-	test2_log.SetFormat("[{date}][{level}][{name}] {message}\n")
-	test2_log.SetDateFormat("2006-01-02")
+
+	for handler := range test2_log.GetHandlers() {
+		test2_log.GetHandlers()[handler].SetFormatter(test2_formatter)
+	}
 
 	test2_log.Print("Notset message.")
 	test2_log.Trace("Trace message.")
