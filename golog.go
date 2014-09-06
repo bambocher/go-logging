@@ -23,8 +23,7 @@
 package golog
 
 var loggers = make(map[string]*Logger)
-
-var root = GetLogger("root")
+var Root = GetLogger("root")
 
 func GetLogger(name string) *Logger {
 	if logger, ok := loggers[name]; ok {
@@ -43,15 +42,16 @@ func GetLogger(name string) *Logger {
 }
 
 func GetName() string {
-	return root.GetName()
+	return Root.GetName()
 }
 
-func SetLevel(level interface{}) {
-	root.SetLevel(level)
+func SetLevel(level interface{}) error {
+	err := Root.SetLevel(level)
+	return err
 }
 
 func GetLevel() int {
-	return root.GetLevel()
+	return Root.GetLevel()
 }
 
 func SetFormat(format string) {
@@ -71,42 +71,42 @@ func GetDateFormat() string {
 }
 
 func Print(args ...interface{}) {
-	root.Print(args...)
+	Root.Print(args...)
 }
 
 func Trace(args ...interface{}) {
-	root.Trace(args...)
+	Root.Trace(args...)
 }
 
 func Debug(args ...interface{}) {
-	root.Debug(args...)
+	Root.Debug(args...)
 }
 
 func Info(args ...interface{}) {
-	root.Info(args...)
+	Root.Info(args...)
 }
 
 func Notice(args ...interface{}) {
-	root.Notice(args...)
+	Root.Notice(args...)
 }
 
 func Warning(args ...interface{}) {
-	root.Warning(args...)
+	Root.Warning(args...)
 }
 
 func Error(args ...interface{}) {
-	root.Error(args...)
+	Root.Error(args...)
 }
 
 func Critical(args ...interface{}) {
-	root.Critical(args...)
+	Root.Critical(args...)
 }
 
 func Alert(args ...interface{}) {
-	root.Alert(args...)
+	Root.Alert(args...)
 }
 
 // Panic is equivalent to Printf() followed by a call to panic().
 func Panic(args ...interface{}) {
-	root.Panic(args...)
+	Root.Panic(args...)
 }
