@@ -11,7 +11,7 @@ Code status
 Installation
 ------------
 
-    $ go get -u github.com/bambocher/golog
+    $ go get -u gopkg.in/bambocher/golog.v0
 
 Quick-start
 -----------
@@ -21,7 +21,7 @@ Minimal:
 ```go
 package main
 
-import log "github.com/bambocher/golog"
+import log "gopkg.in/bambocher/golog.v0"
 
 func main() {
     log.Info(42)
@@ -34,7 +34,7 @@ or more complicated:
 ```go
 package main
 
-import log "github.com/bambocher/golog"
+import log "gopkg.in/bambocher/golog.v0"
 
 func main() {
     log.SetLevel("notset")
@@ -64,7 +64,7 @@ You can find a few more examples here: [examples](examples/)
 Documentation
 -------------
 
-[http://godoc.org/github.com/bambocher/golog](http://godoc.org/github.com/bambocher/golog)
+[http://godoc.org/gopkg.in/bambocher/golog.v0](http://godoc.org/gopkg.in/bambocher/golog.v0)
 
 License
 -------
