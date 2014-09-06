@@ -87,6 +87,11 @@ var levelNumbers = map[string]int{
 	"NOTSET":   NOTSET,
 }
 
+type Level struct {
+	min int
+	max int
+}
+
 func GetLevelName(level int) string {
 	return levelNames[level]
 }

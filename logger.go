@@ -25,24 +25,17 @@ package golog
 import (
 	"errors"
 	"fmt"
-	"io"
 	"os"
-	"path"
-	"runtime"
-	"strconv"
-	"strings"
 	"sync"
-	"time"
 )
 
 var loggers = make(map[string]*Logger)
 
 type Logger struct {
-	name    string
-	mutex   sync.Mutex
-	level   int
-	format  string
-	datefmt string
+	mutex    sync.Mutex
+	name     string
+	level    int
+	handlers []Handler
 }
 
 func (logger *Logger) Log(level int, args ...interface{}) error {
@@ -51,65 +44,34 @@ func (logger *Logger) Log(level int, args ...interface{}) error {
 		return nil
 	}
 
-	var (
-		pc       uintptr
-		pathname string
-		filename string
-		funcName string
-		message  string
-		lineno   int
-		ok       bool
-		writer   io.Writer
-	)
-
-	if pc, pathname, lineno, ok = runtime.Caller(3); !ok {
-		pathname = "???"
-		filename = "???"
-		lineno = 0
-	} else {
-		pcfunc := runtime.FuncForPC(pc)
-		if pcfunc != nil {
-			funcName = pcfunc.Name()
-		} else {
-			funcName = "???"
-		}
-		filename = path.Base(pathname)
-	}
-
-	message = fmt.Sprint(args[0])
+	message := fmt.Sprint(args[0])
 
 	if len(args) != 0 {
 		message = fmt.Sprintf(message, args[1:]...)
 	}
 
-	replace := strings.NewReplacer(
-		"{name}", logger.name,
-		"{level}", GetLevelName(level),
-		"{line}", strconv.Itoa(lineno),
-		"{date}", time.Now().Format(logger.datefmt),
-		"{file}", filename,
-		"{path}", pathname,
-		"{func}", funcName,
-		"{message}", message,
-	)
+	record := NewRecord(level, logger.name, message)
 
-	buf := []byte(replace.Replace(logger.format))
-	if buf[len(buf)-1] != '\n' {
-		buf = append(buf, '\n')
+	for handler := range logger.handlers {
+		if logger.handlers[handler].GetLevel().min <= record.levelNo && record.levelNo <= logger.handlers[handler].GetLevel().max {
+			logger.handlers[handler].Handle(record)
+		}
 	}
 
+	return nil
+}
+
+func (logger *Logger) SetName(name string) {
 	logger.mutex.Lock()
 	defer logger.mutex.Unlock()
 
-	if logger.level >= WARNING {
-		writer = os.Stdout
-	} else {
-		writer = os.Stderr
+	if _, ok := loggers[logger.name]; ok {
+		delete(loggers, logger.name)
 	}
 
-	_, err := writer.Write(buf)
+	logger.name = name
 
-	return err
+	loggers[logger.name] = logger
 }
 
 func (logger *Logger) GetName() string {
@@ -126,7 +88,7 @@ func (logger *Logger) SetLevel(level interface{}) error {
 	case string:
 		logger.level = GetLevelNumber(level.(string))
 	default:
-		return errors.New("Incorrect parameter type level, a valid string or int")
+		return errors.New(fmt.Sprintf("Unknown level type %v. Expected a string or int.", level))
 	}
 
 	return nil
@@ -136,24 +98,17 @@ func (logger *Logger) GetLevel() int {
 	return logger.level
 }
 
-func (logger *Logger) SetFormat(format string) {
+func (logger *Logger) SetHandlers(handlers []Handler) error {
 	logger.mutex.Lock()
 	defer logger.mutex.Unlock()
-	logger.format = format
+
+	logger.handlers = handlers
+
+	return nil
 }
 
-func (logger *Logger) GetFormat() string {
-	return logger.format
-}
-
-func (logger *Logger) SetDateFormat(datefmt string) {
-	logger.mutex.Lock()
-	defer logger.mutex.Unlock()
-	logger.datefmt = datefmt
-}
-
-func (logger *Logger) GetDateFormat() string {
-	return logger.datefmt
+func (logger *Logger) GetHandlers() []Handler {
+	return logger.handlers
 }
 
 func (logger *Logger) Print(args ...interface{}) {
@@ -200,6 +155,12 @@ func GetLogger(name string) *Logger {
 	if logger, ok := loggers[name]; ok {
 		return logger
 	}
+
+	stdout := GetStreamHandler("stdout", os.Stdout)
+	stdout.SetLevel(WARNING, NOTSET)
+
+	stderr := GetStreamHandler("stderr", os.Stderr)
+	stderr.SetLevel(PANIC, ERROR)
 
 	loggers[name] = &Logger{
 		name:     name,

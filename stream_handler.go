@@ -22,70 +22,39 @@
 
 package golog
 
-var Root = GetLogger("root")
+import (
+	"io"
+)
 
-func SetName(name string) {
-	Root.SetName(name)
+type StreamHandler struct {
+	BaseHandler
+	stream io.Writer
 }
 
-func GetName() string {
-	return Root.GetName()
-}
+func (handler *StreamHandler) Handle(record *Record) error {
+	handler.mutex.Lock()
+	defer handler.mutex.Unlock()
 
-func SetLevel(level interface{}) error {
-	err := Root.SetLevel(level)
+	buf := handler.Format(record)
+
+	_, err := handler.stream.Write(buf)
+
 	return err
 }
 
-func GetLevel() int {
-	return Root.GetLevel()
-}
+func GetStreamHandler(name string, stream io.Writer) Handler {
+	if handler, ok := handlers[name]; ok {
+		return handler
+	}
 
-func SetHandlers(handlers []Handler) error {
-	err := Root.SetHandlers(handlers)
-	return err
-}
+	handlers[name] = &StreamHandler{
+		BaseHandler: BaseHandler{
+			name:      name,
+			level:     Level{NOTSET, PANIC},
+			formatter: GetFormatter("default"),
+		},
+		stream: stream,
+	}
 
-func GetHandlers() []Handler {
-	return Root.GetHandlers()
-}
-
-func Print(args ...interface{}) {
-	Root.Print(args...)
-}
-
-func Trace(args ...interface{}) {
-	Root.Trace(args...)
-}
-
-func Debug(args ...interface{}) {
-	Root.Debug(args...)
-}
-
-func Info(args ...interface{}) {
-	Root.Info(args...)
-}
-
-func Notice(args ...interface{}) {
-	Root.Notice(args...)
-}
-
-func Warning(args ...interface{}) {
-	Root.Warning(args...)
-}
-
-func Error(args ...interface{}) {
-	Root.Error(args...)
-}
-
-func Critical(args ...interface{}) {
-	Root.Critical(args...)
-}
-
-func Alert(args ...interface{}) {
-	Root.Alert(args...)
-}
-
-func Panic(args ...interface{}) {
-	Root.Panic(args...)
+	return handlers[name]
 }

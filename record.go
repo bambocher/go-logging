@@ -22,70 +22,60 @@
 
 package golog
 
-var Root = GetLogger("root")
+import (
+	"path"
+	"runtime"
+	"sync"
+)
 
-func SetName(name string) {
-	Root.SetName(name)
+type Record struct {
+	mutex      sync.Mutex
+	loggerName string
+	levelName  string
+	levelNo    int
+	lineNo     int
+	fileName   string
+	pathName   string
+	funcName   string
+	message    string
 }
 
-func GetName() string {
-	return Root.GetName()
-}
+func NewRecord(levelNo int, loggerName, message string) *Record {
 
-func SetLevel(level interface{}) error {
-	err := Root.SetLevel(level)
-	return err
-}
+	var (
+		pc       uintptr
+		lineNo   int
+		fileName string
+		pathName string
+		funcName string
+		ok       bool
+	)
 
-func GetLevel() int {
-	return Root.GetLevel()
-}
+	if pc, pathName, lineNo, ok = runtime.Caller(4); !ok {
+		pathName = "???"
+		fileName = "???"
+		funcName = "???"
+		lineNo = 0
+	} else {
+		pcfunc := runtime.FuncForPC(pc)
+		if pcfunc != nil {
+			funcName = pcfunc.Name()
+		} else {
+			funcName = "???"
+		}
+		fileName = path.Base(pathName)
+	}
 
-func SetHandlers(handlers []Handler) error {
-	err := Root.SetHandlers(handlers)
-	return err
-}
+	record := &Record{
+		loggerName: loggerName,
+		levelName:  GetLevelName(levelNo),
+		levelNo:    levelNo,
+		lineNo:     lineNo,
+		fileName:   fileName,
+		pathName:   pathName,
+		funcName:   funcName,
+		message:    message,
+	}
 
-func GetHandlers() []Handler {
-	return Root.GetHandlers()
-}
-
-func Print(args ...interface{}) {
-	Root.Print(args...)
-}
-
-func Trace(args ...interface{}) {
-	Root.Trace(args...)
-}
-
-func Debug(args ...interface{}) {
-	Root.Debug(args...)
-}
-
-func Info(args ...interface{}) {
-	Root.Info(args...)
-}
-
-func Notice(args ...interface{}) {
-	Root.Notice(args...)
-}
-
-func Warning(args ...interface{}) {
-	Root.Warning(args...)
-}
-
-func Error(args ...interface{}) {
-	Root.Error(args...)
-}
-
-func Critical(args ...interface{}) {
-	Root.Critical(args...)
-}
-
-func Alert(args ...interface{}) {
-	Root.Alert(args...)
-}
-
-func Panic(args ...interface{}) {
-	Root.Panic(args...)
+	return record
 }
