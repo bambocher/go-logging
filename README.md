@@ -40,6 +40,7 @@ func main() {
     log.SetLevel("notset")
     log.SetFormat("[{date}][{levelName}][{fileName}:{lineNo}] {message}")
     log.SetDateFormat("2006-01-02 15:04:05")
+    log.SetFile("main.log")
 
     log.Print("Notset message.")
     log.Trace("Trace message.")

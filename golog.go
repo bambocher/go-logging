@@ -99,3 +99,11 @@ func SetFormat(format string) {
 func SetDateFormat(dateFormat string) {
 	DefaultFormatter.SetDateFormat(dateFormat)
 }
+
+func SetFile(fileName string) error {
+	file, err := GetFileHandler("file", fileName, 0777, 0666)
+
+	RootLogger.handlers = append(RootLogger.handlers, file)
+
+	return err
+}
