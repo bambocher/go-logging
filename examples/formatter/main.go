@@ -22,11 +22,27 @@
 
 package main
 
-import log "github.com/bambocher/golog"
+import (
+	log "github.com/bambocher/golog"
+	"os"
+)
 
 func main() {
+	test_formatter := log.GetFormatter("test_formatter")
+	test_formatter.SetFormat("[{date}][{levelName}][{fileName}:{lineNo}] {message}")
+	test_formatter.SetDateFormat("2006-01-02 15:04:05")
+
+	test_stdout := log.GetStreamHandler("test_stdout", os.Stdout)
+	test_stdout.SetLevel(log.WARNING, log.NOTSET)
+	test_stdout.SetFormatter(test_formatter)
+
+	test_stderr := log.GetStreamHandler("test_stderr", os.Stderr)
+	test_stderr.SetLevel(log.PANIC, log.ERROR)
+	test_stderr.SetFormatter(test_formatter)
+
 	test_log := log.GetLogger("test")
 	test_log.SetLevel(log.NOTSET)
+	test_log.SetHandlers([]log.Handler{test_stdout, test_stderr})
 
 	test_log.Print("Notset message.")
 	test_log.Trace("Trace message.")
@@ -39,8 +55,21 @@ func main() {
 	test_log.Alert("Alert message.")
 	test_log.Panic("Panic message.")
 
+	test2_formatter := log.GetFormatter("test2_formatter")
+	test2_formatter.SetFormat("[{date}][{levelNo}][{loggerName}] {message}\n")
+	test2_formatter.SetDateFormat("2006-01-02")
+
+	test2_stdout := log.GetStreamHandler("test2_stdout", os.Stdout)
+	test2_stdout.SetLevel(log.WARNING, log.NOTSET)
+	test2_stdout.SetFormatter(test2_formatter)
+
+	test2_stderr := log.GetStreamHandler("test2_stderr", os.Stderr)
+	test2_stderr.SetLevel(log.PANIC, log.ERROR)
+	test2_stderr.SetFormatter(test2_formatter)
+
 	test2_log := log.GetLogger("test2")
 	test2_log.SetLevel("NOTICE")
+	test2_log.SetHandlers([]log.Handler{test2_stdout, test2_stderr})
 
 	test2_log.Print("Notset message.")
 	test2_log.Trace("Trace message.")
