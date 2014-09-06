@@ -40,17 +40,25 @@ func main() {
 	stderr.SetLevel(log.PANIC, log.ERROR)
 	stderr.SetFormatter(formatter)
 
-	file, err := log.GetFileHandler("file", "logs/main.log", 0777, 0666)
+	fileInfo, err := log.GetFileHandler("fileInfo", "logs/info.log", 0777, 0666)
 	if err != nil {
 		panic(err)
 	}
 
-	file.SetLevel(log.PANIC, log.NOTSET)
-	file.SetFormatter(formatter)
+	fileInfo.SetLevel(log.WARNING, log.NOTSET)
+	fileInfo.SetFormatter(formatter)
+
+	fileError, err := log.GetFileHandler("fileError", "logs/error.log", 0777, 0666)
+	if err != nil {
+		panic(err)
+	}
+
+	fileError.SetLevel(log.PANIC, log.ERROR)
+	fileError.SetFormatter(formatter)
 
 	root := log.GetLogger("root")
 	root.SetLevel(log.NOTSET)
-	root.SetHandlers([]log.Handler{stdout, stderr, file})
+	root.SetHandlers([]log.Handler{stdout, stderr, fileInfo, fileError})
 
 	log.Print("Notset message.")
 	log.Trace("Trace message.")
