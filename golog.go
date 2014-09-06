@@ -106,7 +106,6 @@ func Alert(args ...interface{}) {
 	Root.Alert(args...)
 }
 
-// Panic is equivalent to Printf() followed by a call to panic().
 func Panic(args ...interface{}) {
 	Root.Panic(args...)
 }

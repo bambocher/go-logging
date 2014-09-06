@@ -192,5 +192,4 @@ func (logger *Logger) Alert(args ...interface{}) {
 
 func (logger *Logger) Panic(args ...interface{}) {
 	logger.Log(PANIC, args...)
-	panic(fmt.Sprint(args...))
 }
