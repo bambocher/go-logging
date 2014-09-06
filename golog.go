@@ -24,6 +24,8 @@ package golog
 
 var RootLogger = GetLogger("root")
 
+var DefaultFormatter = GetFormatter("default")
+
 func SetName(name string) {
 	RootLogger.SetName(name)
 }
@@ -88,4 +90,12 @@ func Alert(args ...interface{}) {
 
 func Panic(args ...interface{}) {
 	RootLogger.Panic(args...)
+}
+
+func SetFormat(format string) {
+	DefaultFormatter.SetFormat(format)
+}
+
+func SetDateFormat(dateFormat string) {
+	DefaultFormatter.SetDateFormat(dateFormat)
 }
