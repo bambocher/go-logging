@@ -23,59 +23,45 @@
 package golog
 
 import (
-	"path"
+	p "path"
 	"runtime"
-	"sync"
+	"strconv"
 )
 
 type Record struct {
-	mutex      sync.Mutex
-	loggerName string
-	levelName  string
-	levelNo    int
-	lineNo     int
-	fileName   string
-	pathName   string
-	funcName   string
-	message    string
+	logger   *Logger
+	level    string
+	line     string
+	file     string
+	path     string
+	function string
+	message  string
 }
 
-func NewRecord(levelNo int, loggerName, message string) *Record {
+func NewRecord(level int, logger *Logger, message string) *Record {
+	unknown := "???"
+	var file, function string
 
-	var (
-		pc       uintptr
-		lineNo   int
-		fileName string
-		pathName string
-		funcName string
-		ok       bool
-	)
-
-	if pc, pathName, lineNo, ok = runtime.Caller(4); !ok {
-		pathName = "???"
-		fileName = "???"
-		funcName = "???"
-		lineNo = 0
-	} else {
-		pcfunc := runtime.FuncForPC(pc)
-		if pcfunc != nil {
-			funcName = pcfunc.Name()
+	pc, path, line, ok := runtime.Caller(4)
+	if ok {
+		pcFunc := runtime.FuncForPC(pc)
+		if pcFunc != nil {
+			function = pcFunc.Name()
 		} else {
-			funcName = "???"
+			function = unknown
 		}
-		fileName = path.Base(pathName)
+		file = p.Base(path)
+	} else {
+		function, file, path, line = unknown, unknown, unknown, 0
 	}
 
-	record := &Record{
-		loggerName: loggerName,
-		levelName:  GetLevelName(levelNo),
-		levelNo:    levelNo,
-		lineNo:     lineNo,
-		fileName:   fileName,
-		pathName:   pathName,
-		funcName:   funcName,
-		message:    message,
+	return &Record{
+		logger,
+		levels[level],
+		strconv.Itoa(line),
+		file,
+		path,
+		function,
+		message,
 	}
-
-	return record
 }

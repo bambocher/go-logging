@@ -1,4 +1,4 @@
-// go-logging - Logging library for Go
+// golog - Logging library for Go
 //
 // Copyright (c) 2014 Dmitry Prazdnichnov <dp@bambucha.org>
 //
@@ -25,19 +25,15 @@ package main
 import log "github.com/bambocher/golog"
 
 func main() {
-	log.SetLevel("notset")
-	log.SetFormat("[{date}][{levelName}][{fileName}:{lineNo}] {message}")
+	log.SetLevel(log.DEBUG)
+	log.SetFormat("[{time}][{level}][{file}:{line}] {message}")
 	log.SetDateFormat("2006-01-02 15:04:05")
-	log.SetFile("main.log")
+	log.AddFile("main.log")
 
-	log.Print("Notset message.")
-	log.Trace("Trace message.")
 	log.Debug("Debug message.")
 	log.Info("Informational message.")
 	log.Notice("Notice message.")
 	log.Warning("Warning message.")
 	log.Error("Error message.")
 	log.Critical("Critical message.")
-	log.Alert("Alert message.")
-	log.Panic("Panic message.")
 }

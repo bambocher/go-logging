@@ -24,8 +24,6 @@ package golog
 
 var RootLogger = GetLogger("root")
 
-var DefaultFormatter = GetFormatter("default")
-
 func SetName(name string) {
 	RootLogger.SetName(name)
 }
@@ -34,30 +32,24 @@ func GetName() string {
 	return RootLogger.GetName()
 }
 
-func SetLevel(level interface{}) error {
-	err := RootLogger.SetLevel(level)
-	return err
+func SetLevel(level int) {
+	RootLogger.SetLevel(level)
 }
 
 func GetLevel() int {
 	return RootLogger.GetLevel()
 }
 
-func SetHandlers(handlers []Handler) error {
-	err := RootLogger.SetHandlers(handlers)
-	return err
+func SetHandlers(args ...Handler) {
+	RootLogger.SetHandlers(args...)
 }
 
 func GetHandlers() []Handler {
 	return RootLogger.GetHandlers()
 }
 
-func Print(args ...interface{}) {
-	RootLogger.Print(args...)
-}
-
-func Trace(args ...interface{}) {
-	RootLogger.Trace(args...)
+func AddHandlers(args ...Handler) {
+	RootLogger.AddHandlers(args...)
 }
 
 func Debug(args ...interface{}) {
@@ -84,14 +76,6 @@ func Critical(args ...interface{}) {
 	RootLogger.Critical(args...)
 }
 
-func Alert(args ...interface{}) {
-	RootLogger.Alert(args...)
-}
-
-func Panic(args ...interface{}) {
-	RootLogger.Panic(args...)
-}
-
 func SetFormat(format string) {
 	DefaultFormatter.SetFormat(format)
 }
@@ -100,10 +84,13 @@ func SetDateFormat(dateFormat string) {
 	DefaultFormatter.SetDateFormat(dateFormat)
 }
 
-func SetFile(fileName string) error {
-	file, err := GetFileHandler("file", fileName, 0777, 0666)
+func AddFile(filename string) error {
+	file, err := NewFileHandler(AllLevels, DefaultFormatter, filename)
+	if err != nil {
+		return err
+	}
 
-	RootLogger.handlers = append(RootLogger.handlers, file)
+	AddHandlers(file)
 
-	return err
+	return nil
 }

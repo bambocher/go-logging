@@ -22,93 +22,40 @@
 
 package golog
 
-import (
-	"errors"
-	"fmt"
-	"sync"
-)
-
-var handlers = make(map[string]Handler)
+import "sync"
 
 type Handler interface {
-	SetName(name string)
-	GetName() string
-	SetLevel(min, max interface{}) error
-	GetLevel() Level
+	SetLevel(level *Level)
+	GetLevel() *Level
 	SetFormatter(formater *Formatter)
 	GetFormatter() *Formatter
-	Format(record *Record) []byte
-	Handle(record *Record) error
+	Handle(record *Record)
 }
 
-// BaseHandler struct dispatch logging events to specific destinations.
 type BaseHandler struct {
-	mutex     sync.Mutex
-	name      string
-	level     Level
+	sync.Mutex
+	level     *Level
 	formatter *Formatter
 }
 
-func (handler *BaseHandler) SetName(name string) {
-	handler.mutex.Lock()
-	defer handler.mutex.Unlock()
-
-	if _, ok := handlers[handler.name]; ok {
-		delete(handlers, handler.name)
-	}
-
-	handler.name = name
-
-	handlers[handler.name] = handler
+func (handler *BaseHandler) SetLevel(level *Level) {
+	handler.Lock()
+	handler.level = level
+	handler.Unlock()
 }
 
-func (handler *BaseHandler) GetName() string {
-	return handler.name
-}
-
-func (handler *BaseHandler) SetLevel(min, max interface{}) error {
-	handler.mutex.Lock()
-	defer handler.mutex.Unlock()
-
-	switch min.(type) {
-	case int:
-		handler.level.min = min.(int)
-	case string:
-		handler.level.min = GetLevelNumber(min.(string))
-	default:
-		return errors.New(fmt.Sprintf("Unknown level type %v. Expected a string or int.", min))
-	}
-
-	switch max.(type) {
-	case int:
-		handler.level.max = max.(int)
-	case string:
-		handler.level.max = GetLevelNumber(max.(string))
-	default:
-		return errors.New(fmt.Sprintf("Unknown level type %v. Expected a string or int.", max))
-	}
-
-	return nil
-}
-
-func (handler *BaseHandler) GetLevel() Level {
+func (handler *BaseHandler) GetLevel() *Level {
 	return handler.level
 }
 
 func (handler *BaseHandler) SetFormatter(formater *Formatter) {
-	handler.mutex.Lock()
-	defer handler.mutex.Unlock()
+	handler.Lock()
 	handler.formatter = formater
+	handler.Unlock()
 }
 
 func (handler *BaseHandler) GetFormatter() *Formatter {
 	return handler.formatter
 }
 
-func (handler *BaseHandler) Format(record *Record) []byte {
-	return handler.formatter.Format(record)
-}
-
-func (handler *BaseHandler) Handle(record *Record) error {
-	return nil
-}
+func (handler *BaseHandler) Handle(record *Record) {}

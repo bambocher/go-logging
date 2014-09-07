@@ -23,16 +23,17 @@
 package golog
 
 import (
-	"errors"
 	"fmt"
-	"os"
 	"sync"
 )
 
-var loggers = make(map[string]*Logger)
+var golog = struct {
+	sync.RWMutex
+	loggers map[string]*Logger
+}{loggers: make(map[string]*Logger)}
 
 type Logger struct {
-	mutex    sync.Mutex
+	sync.Mutex
 	name     string
 	level    int
 	handlers []Handler
@@ -40,7 +41,7 @@ type Logger struct {
 
 func (logger *Logger) Log(level int, args ...interface{}) error {
 
-	if logger.level < level {
+	if logger.level > level {
 		return nil
 	}
 
@@ -50,10 +51,11 @@ func (logger *Logger) Log(level int, args ...interface{}) error {
 		message = fmt.Sprintf(message, args[1:]...)
 	}
 
-	record := NewRecord(level, logger.name, message)
+	record := NewRecord(level, logger, message)
 
 	for handler := range logger.handlers {
-		if logger.handlers[handler].GetLevel().min <= record.levelNo && record.levelNo <= logger.handlers[handler].GetLevel().max {
+		handlerLevel := logger.handlers[handler].GetLevel()
+		if handlerLevel.Min <= level && level <= handlerLevel.Max {
 			logger.handlers[handler].Handle(record)
 		}
 	}
@@ -62,61 +64,53 @@ func (logger *Logger) Log(level int, args ...interface{}) error {
 }
 
 func (logger *Logger) SetName(name string) {
-	logger.mutex.Lock()
-	defer logger.mutex.Unlock()
+	logger.Lock()
+	defer logger.Unlock()
 
-	if _, ok := loggers[logger.name]; ok {
-		delete(loggers, logger.name)
+	golog.RLock()
+	_, ok := golog.loggers[logger.name]
+	golog.RUnlock()
+	if ok {
+		golog.Lock()
+		delete(golog.loggers, logger.name)
+		golog.Unlock()
 	}
 
 	logger.name = name
 
-	loggers[logger.name] = logger
+	golog.Lock()
+	golog.loggers[logger.name] = logger
+	golog.Unlock()
 }
 
 func (logger *Logger) GetName() string {
 	return logger.name
 }
 
-func (logger *Logger) SetLevel(level interface{}) error {
-	logger.mutex.Lock()
-	defer logger.mutex.Unlock()
-
-	switch level.(type) {
-	case int:
-		logger.level = level.(int)
-	case string:
-		logger.level = GetLevelNumber(level.(string))
-	default:
-		return errors.New(fmt.Sprintf("Unknown level type %v. Expected a string or int.", level))
-	}
-
-	return nil
+func (logger *Logger) SetLevel(level int) {
+	logger.Lock()
+	logger.level = level
+	logger.Unlock()
 }
 
 func (logger *Logger) GetLevel() int {
 	return logger.level
 }
 
-func (logger *Logger) SetHandlers(handlers []Handler) error {
-	logger.mutex.Lock()
-	defer logger.mutex.Unlock()
-
-	logger.handlers = handlers
-
-	return nil
+func (logger *Logger) SetHandlers(args ...Handler) {
+	logger.Lock()
+	logger.handlers = args
+	logger.Unlock()
 }
 
 func (logger *Logger) GetHandlers() []Handler {
 	return logger.handlers
 }
 
-func (logger *Logger) Print(args ...interface{}) {
-	logger.Log(NOTSET, args...)
-}
-
-func (logger *Logger) Trace(args ...interface{}) {
-	logger.Log(TRACE, args...)
+func (logger *Logger) AddHandlers(args ...Handler) {
+	logger.Lock()
+	logger.handlers = append(logger.handlers, args...)
+	logger.Unlock()
 }
 
 func (logger *Logger) Debug(args ...interface{}) {
@@ -143,30 +137,23 @@ func (logger *Logger) Critical(args ...interface{}) {
 	logger.Log(CRITICAL, args...)
 }
 
-func (logger *Logger) Alert(args ...interface{}) {
-	logger.Log(ALERT, args...)
-}
-
-func (logger *Logger) Panic(args ...interface{}) {
-	logger.Log(PANIC, args...)
-}
-
 func GetLogger(name string) *Logger {
-	if logger, ok := loggers[name]; ok {
+	golog.RLock()
+	logger, ok := golog.loggers[name]
+	golog.RUnlock()
+	if ok {
 		return logger
 	}
 
-	stdout := GetStreamHandler("stdout", os.Stdout)
-	stdout.SetLevel(WARNING, NOTSET)
-
-	stderr := GetStreamHandler("stderr", os.Stderr)
-	stderr.SetLevel(PANIC, ERROR)
-
-	loggers[name] = &Logger{
+	logger = &Logger{
 		name:     name,
-		level:    NOTSET,
-		handlers: []Handler{stdout, stderr},
+		level:    DEBUG,
+		handlers: []Handler{StdoutHandler, StderrHandler},
 	}
 
-	return loggers[name]
+	golog.Lock()
+	golog.loggers[name] = logger
+	golog.Unlock()
+
+	return logger
 }

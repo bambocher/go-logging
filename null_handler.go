@@ -22,26 +22,8 @@
 
 package golog
 
-type NullHandler struct {
-	BaseHandler
-}
+var NullHandler = NewNullHandler()
 
-func (handler *NullHandler) Handle(record *Record) error {
-	return nil
-}
-
-func GetNullHandler(name string) Handler {
-	if handler, ok := handlers[name]; ok {
-		return handler
-	}
-
-	handlers[name] = &NullHandler{
-		BaseHandler: BaseHandler{
-			name:      name,
-			level:     Level{PANIC, NOTSET},
-			formatter: GetFormatter("default"),
-		},
-	}
-
-	return handlers[name]
+func NewNullHandler() Handler {
+	return &BaseHandler{}
 }

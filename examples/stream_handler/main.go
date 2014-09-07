@@ -1,4 +1,4 @@
-// go-logging - Logging library for Go
+// golog - Logging library for Go
 //
 // Copyright (c) 2014 Dmitry Prazdnichnov <dp@bambucha.org>
 //
@@ -28,30 +28,17 @@ import (
 )
 
 func main() {
-	formatter := log.GetFormatter("default")
-	formatter.SetFormat("[{date}][{levelName}][{fileName}:{lineNo}] {message}")
-	formatter.SetDateFormat("2006-01-02 15:04:05")
-
-	stdout := log.GetStreamHandler("stdout", os.Stdout)
-	stdout.SetLevel(log.WARNING, log.NOTSET)
-	stdout.SetFormatter(formatter)
-
-	stderr := log.GetStreamHandler("stderr", os.Stderr)
-	stderr.SetLevel(log.PANIC, log.ERROR)
-	stderr.SetFormatter(formatter)
+	stdout := log.NewStreamHandler(log.InfoLevels, log.DefaultFormatter, os.Stdout)
+	stderr := log.NewStreamHandler(log.ErrorLevels, log.DefaultFormatter, os.Stderr)
 
 	root := log.GetLogger("root")
-	root.SetLevel(log.NOTSET)
-	root.SetHandlers([]log.Handler{stdout, stderr})
+	root.SetLevel(log.DEBUG)
+	root.SetHandlers(stdout, stderr)
 
-	log.Print("Notset message.")
-	log.Trace("Trace message.")
 	log.Debug("Debug message.")
 	log.Info("Informational message.")
 	log.Notice("Notice message.")
 	log.Warning("Warning message.")
 	log.Error("Error message.")
 	log.Critical("Critical message.")
-	log.Alert("Alert message.")
-	log.Panic("Panic message.")
 }

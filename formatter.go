@@ -23,26 +23,23 @@
 package golog
 
 import (
-	"bytes"
-	"strconv"
 	"strings"
 	"sync"
 	"time"
 )
 
-var formatters = make(map[string]*Formatter)
+var DefaultFormatter = NewFormatter("[{time}][{level}][{file}:{line}] {message}", "2006-01-02 15:04:05")
 
 type Formatter struct {
-	mutex      sync.Mutex
-	name       string
+	sync.Mutex
 	format     string
 	dateFormat string
 }
 
 func (formatter *Formatter) SetFormat(format string) {
-	formatter.mutex.Lock()
-	defer formatter.mutex.Unlock()
+	formatter.Lock()
 	formatter.format = format
+	formatter.Unlock()
 }
 
 func (formatter *Formatter) GetFormat() string {
@@ -50,47 +47,39 @@ func (formatter *Formatter) GetFormat() string {
 }
 
 func (formatter *Formatter) SetDateFormat(dateFormat string) {
-	formatter.mutex.Lock()
-	defer formatter.mutex.Unlock()
+	formatter.Lock()
 	formatter.dateFormat = dateFormat
+	formatter.Unlock()
 }
 
 func (formatter *Formatter) GetDateFormat() string {
 	return formatter.dateFormat
 }
 
-func (formatter *Formatter) Format(record *Record) []byte {
+func (formatter *Formatter) Format(record *Record) string {
 
 	replace := strings.NewReplacer(
-		"{loggerName}", record.loggerName,
-		"{levelName}", record.levelName,
-		"{levelNo}", strconv.Itoa(record.levelNo),
-		"{lineNo}", strconv.Itoa(record.lineNo),
-		"{date}", time.Now().Format(formatter.dateFormat),
-		"{fileName}", record.fileName,
-		"{pathName}", record.pathName,
-		"{funcName}", record.funcName,
+		"{logger}", record.logger.name,
+		"{level}", record.level,
+		"{line}", record.line,
+		"{time}", time.Now().Format(formatter.dateFormat),
+		"{file}", record.file,
+		"{path}", record.path,
+		"{function}", record.function,
 		"{message}", record.message,
 	)
 
-	buf := []byte(replace.Replace(formatter.format))
-	if !bytes.HasSuffix(buf, []byte("\n")) {
-		buf = append(buf, '\n')
+	replaced := replace.Replace(formatter.format)
+	if !strings.HasSuffix(replaced, "\n") {
+		replaced += "\n"
 	}
 
-	return buf
+	return replaced
 }
 
-func GetFormatter(name string) *Formatter {
-	if formatter, ok := formatters[name]; ok {
-		return formatter
+func NewFormatter(format, dateFormat string) *Formatter {
+	return &Formatter{
+		format:     format,
+		dateFormat: dateFormat,
 	}
-
-	formatters[name] = &Formatter{
-		name:       name,
-		format:     "[{date}][{levelName}][{fileName}:{lineNo}] {message}",
-		dateFormat: "2006-01-02 15:04:05",
-	}
-
-	return formatters[name]
 }

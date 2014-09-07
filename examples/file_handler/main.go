@@ -22,52 +22,23 @@
 
 package main
 
-import (
-	log "github.com/bambocher/golog"
-	"os"
-)
+import log "github.com/bambocher/golog"
 
 func main() {
-	formatter := log.GetFormatter("default")
-	formatter.SetFormat("[{date}][{levelName}][{fileName}:{lineNo}] {message}")
-	formatter.SetDateFormat("2006-01-02 15:04:05")
-
-	stdout := log.GetStreamHandler("stdout", os.Stdout)
-	stdout.SetLevel(log.WARNING, log.NOTSET)
-	stdout.SetFormatter(formatter)
-
-	stderr := log.GetStreamHandler("stderr", os.Stderr)
-	stderr.SetLevel(log.PANIC, log.ERROR)
-	stderr.SetFormatter(formatter)
-
-	fileInfo, err := log.GetFileHandler("fileInfo", "logs/info.log", 0777, 0666)
-	if err != nil {
-		panic(err)
+	fileInfo, err := log.NewFileHandler(log.InfoLevels, log.DefaultFormatter, "logs/info.log")
+	if err == nil {
+		log.AddHandlers(fileInfo)
 	}
 
-	fileInfo.SetLevel(log.WARNING, log.NOTSET)
-	fileInfo.SetFormatter(formatter)
-
-	fileError, err := log.GetFileHandler("fileError", "logs/error.log", 0777, 0666)
-	if err != nil {
-		panic(err)
+	fileError, err := log.NewFileHandler(log.ErrorLevels, log.DefaultFormatter, "logs/error.log")
+	if err == nil {
+		log.AddHandlers(fileError)
 	}
 
-	fileError.SetLevel(log.PANIC, log.ERROR)
-	fileError.SetFormatter(formatter)
-
-	root := log.GetLogger("root")
-	root.SetLevel(log.NOTSET)
-	root.SetHandlers([]log.Handler{stdout, stderr, fileInfo, fileError})
-
-	log.Print("Notset message.")
-	log.Trace("Trace message.")
 	log.Debug("Debug message.")
 	log.Info("Informational message.")
 	log.Notice("Notice message.")
 	log.Warning("Warning message.")
 	log.Error("Error message.")
 	log.Critical("Critical message.")
-	log.Alert("Alert message.")
-	log.Panic("Panic message.")
 }

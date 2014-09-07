@@ -28,45 +28,18 @@ import (
 	"path"
 )
 
-type FileHandler struct {
-	BaseHandler
-	file *os.File
-}
+func NewFileHandler(level *Level, formatter *Formatter, filename string) (Handler, error) {
+	filepath := path.Dir(filename)
 
-func (handler *FileHandler) Handle(record *Record) error {
-	handler.mutex.Lock()
-	defer handler.mutex.Unlock()
-
-	buf := handler.Format(record)
-
-	_, err := handler.file.Write(buf)
-
-	return err
-}
-
-func GetFileHandler(name, fileName string, dirMode, fileMode os.FileMode) (Handler, error) {
-	if handler, ok := handlers[name]; ok {
-		return handler, nil
-	}
-
-	err := os.MkdirAll(path.Dir(fileName), dirMode)
+	err := os.MkdirAll(filepath, os.ModeDir|os.ModePerm)
 	if err != nil {
-		return nil, errors.New("Cannot create directory: " + fileName)
+		return nil, errors.New("Cannot create directory: " + filepath)
 	}
 
-	file, err := os.OpenFile(fileName, os.O_WRONLY|os.O_APPEND|os.O_CREATE, fileMode)
+	file, err := os.OpenFile(filename, os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0666)
 	if err != nil {
-		return nil, errors.New("Cannot open file: " + fileName)
+		return nil, errors.New("Cannot open file: " + filename)
 	}
 
-	handlers[name] = &FileHandler{
-		BaseHandler: BaseHandler{
-			name:      name,
-			level:     Level{PANIC, NOTSET},
-			formatter: GetFormatter("default"),
-		},
-		file: file,
-	}
-
-	return handlers[name], nil
+	return NewStreamHandler(level, formatter, file), nil
 }

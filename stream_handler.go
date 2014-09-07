@@ -22,39 +22,31 @@
 
 package golog
 
-import (
-	"io"
-)
+import "os"
+
+var StdoutHandler = NewStreamHandler(InfoLevels, DefaultFormatter, os.Stdout)
+var StderrHandler = NewStreamHandler(ErrorLevels, DefaultFormatter, os.Stderr)
 
 type StreamHandler struct {
 	BaseHandler
-	stream io.Writer
+	stream *os.File
 }
 
-func (handler *StreamHandler) Handle(record *Record) error {
-	handler.mutex.Lock()
-	defer handler.mutex.Unlock()
+func (handler *StreamHandler) Handle(record *Record) {
+	handler.Lock()
+	defer handler.Unlock()
 
-	buf := handler.Format(record)
+	formated := handler.formatter.Format(record)
 
-	_, err := handler.stream.Write(buf)
-
-	return err
+	handler.stream.WriteString(formated)
 }
 
-func GetStreamHandler(name string, stream io.Writer) Handler {
-	if handler, ok := handlers[name]; ok {
-		return handler
-	}
-
-	handlers[name] = &StreamHandler{
+func NewStreamHandler(level *Level, formatter *Formatter, stream *os.File) Handler {
+	return &StreamHandler{
 		BaseHandler: BaseHandler{
-			name:      name,
-			level:     Level{PANIC, NOTSET},
-			formatter: GetFormatter("default"),
+			level:     level,
+			formatter: formatter,
 		},
 		stream: stream,
 	}
-
-	return handlers[name]
 }
