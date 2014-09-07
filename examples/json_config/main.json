@@ -1,0 +1,58 @@
+{
+    "formatters": {
+        "default": {
+            "format": "[{time}][{level}][{file}:{line}] {message}",
+            "dateFormat": "2006-01-02 15:04:05"
+        }
+    },
+    "handlers": {
+        "custom_stdout": {
+            "type": "StreamHandler",
+            "level": {
+                "min": "debug",
+                "max": "warning"
+            },
+            "formatter": "default",
+            "properties": {
+                "stream": "os.Stdout"
+            }
+        },
+        "custom_stderr": {
+            "type": "StreamHandler",
+            "level": {
+                "min": "error",
+                "max": "critical"
+            },
+            "formatter": "default",
+            "properties": {
+                "stream": "os.Stderr"
+            }
+        },
+        "file": {
+            "type": "FileHandler",
+            "level": {
+                "min": "debug",
+                "max": "critical"
+            },
+            "formatter": "default",
+            "properties": {
+                "filename": "main.log"
+            }
+        },
+        "null": {
+            "type": "NullHandler"
+        },
+        "stdout": {
+            "type": "StdoutHandler"
+        },
+        "stderr": {
+            "type": "StderrHandler"
+        }
+    },
+    "loggers": {
+        "root": {
+            "level": "debug",
+            "handlers": ["custom_stdout", "custom_stderr", "file", "null", "stdout", "stderr"]
+        }
+    }
+}
