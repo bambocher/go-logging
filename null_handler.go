@@ -22,8 +22,11 @@
 
 package golog
 
-var NullHandler = NewNullHandler()
+var NullHandler = NewNullHandler(AllLevels, DefaultFormatter)
 
-func NewNullHandler() Handler {
-	return &BaseHandler{}
+func NewNullHandler(level *Level, formatter *Formatter) Handler {
+	return &BaseHandler{
+		level:     level,
+		formatter: formatter,
+	}
 }
