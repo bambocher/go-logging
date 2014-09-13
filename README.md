@@ -1,13 +1,10 @@
 golog
 ==========
 
-Simple logging library for Golang.
-
-Code status
------------
-
 [![Build Status](https://travis-ci.org/bambocher/golog.svg?branch=master)](https://travis-ci.org/bambocher/golog)
 [![GoDoc](https://godoc.org/gopkg.in/bambocher/golog.v0?status.png)](https://godoc.org/gopkg.in/bambocher/golog.v0)
+
+Simple logging library for Golang.
 
 Installation
 ------------
