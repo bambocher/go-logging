@@ -7,6 +7,7 @@ Code status
 -----------
 
 [![Build Status](https://travis-ci.org/bambocher/golog.svg?branch=master)](https://travis-ci.org/bambocher/golog)
+[![GoDoc](https://godoc.org/gopkg.in/bambocher/golog.v0?status.png)](https://godoc.org/gopkg.in/bambocher/golog.v0)
 
 Installation
 ------------
@@ -56,11 +57,6 @@ Examples
 --------
 
 You can find a few more examples here: [examples](examples/)
-
-Documentation
--------------
-
-[http://godoc.org/gopkg.in/bambocher/golog.v0](http://godoc.org/gopkg.in/bambocher/golog.v0)
 
 License
 -------
